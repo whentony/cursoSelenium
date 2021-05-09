@@ -48,6 +48,9 @@ class PaginaInicialTest extends TestCase
        // self::assertSame('Exemplo da lista dos revendedores de gás de cozinha:', $textoAzulEscuro);
         self::assertSame('Tem dúvida para comprar Gás', $textoAzulEscuro2);
 
+        //Fechar navegador
+        $driver->close();
+
     }
 
 }
