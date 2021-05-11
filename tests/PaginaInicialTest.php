@@ -2,33 +2,44 @@
 namespace tests;
 use Facebook\WebDriver\Remote\RemoteWebDriver;
 use Facebook\WebDriver\Remote\DesiredCapabilities;
+use Facebook\WebDriver\Remote\RemoteWebElement;
 use Facebook\WebDriver\WebDriverBy;
+use Facebook\WebDriver\WebDriver;
 use PHPUnit\Framework\TestCase;
 
 class PaginaInicialTest extends TestCase
 {
-    private WebDriverBy $driver;
+    private static WebDriver $driver;
     /*
-     * SetUp executa antes de inicar os testes
-     */
-    protected function setUp(): void
+ * 1 Navegador a cada teste
+ */
+    public static function setUpBeforeClass(): void
     {
         //Arrange
         //Host do Selenium
         $host = 'http://localhost:4444/wd/hub';
         //Executa no chrome
-        $this->driver = RemoteWebDriver::create($host, DesiredCapabilities::chrome());
+        self::$driver = RemoteWebDriver::create($host, DesiredCapabilities::chrome());
 
         //Act
         //Página que vai executar o teste
-        $this->driver->navigate()->to('https://www.precodogas.com.br');
+        self::$driver->navigate()->to('https://www.precodogas.com.br');
     }
+    /*
+     * SetUp executa antes de inicar os testes
+     */
+    protected function setUp(): void
+    {
+        //Página que vai executar o teste
+        self::$driver->navigate()->to('https://www.precodogas.com.br');
+    }
+
 /*
  * tearDown Executa ao final de cada teste
  */
     protected function tearDown(): void
     {
-        $this->driver->close();
+        self::$driver->close();
     }
 
     /* public function testOpenSitePrincipal()
@@ -54,10 +65,10 @@ class PaginaInicialTest extends TestCase
 
         //Buscar pelo nome da tag
         $h1Locator = WebDriverBy::tagName('h4');
-        $textoH1 = $this->driver->findElement($h1Locator)->getText();
+        $textoH1 = self::$driver->findElement($h1Locator)->getText();
 
-        $textoAzulEscuro = $this->driver->findElement(WebDriverBy::className('azul-escuro'))->getText();
-        $textoAzulEscuro2 = $this->driver->findElement(WebDriverBy::xpath('//a[@class="azul-escuro text-center antonhome2 mt-3"]'))->getText();
+        $textoAzulEscuro = self::$driver->findElement(WebDriverBy::className('azul-escuro'))->getText();
+        $textoAzulEscuro2 = self::$driver->findElement(WebDriverBy::xpath('//a[@class="azul-escuro text-center antonhome2 mt-3"]'))->getText();
         //Assert
         //Procura um palavra dentro do código fonte da página
         self::assertSame('Pague o preço do site.', $textoH1);
